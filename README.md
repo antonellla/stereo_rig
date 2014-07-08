@@ -12,3 +12,4 @@ This repository contains all software that runs on the stereo diving rig.
 * Pressure sensor
 * Stereo See3CAMs
 * Stereo QX100 cameras
+* Testing
