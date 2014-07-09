@@ -36,5 +36,5 @@ ROS Packages:
 
 * dvl_driver: ROS driver for Teledyne Explorer DVL
 * os5000: ROS driver for OceanServer pressure sensor and compass
-* microstrain_3x... : ROS driver for Microstrain IMU
+* microstrain_3dmgx2_imu: ROS driver for Microstrain IMU
 * see3cam: ROS driver built on uvc_camera for See3CAM machine vision cameras

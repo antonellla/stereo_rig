@@ -1,0 +1,3 @@
+[submodule "src/microstrain_3dmgx2_imu"]
+	path = src/microstrain_3dmgx2_imu
+	url = https://github.com/ros-drivers/microstrain_3dmgx2_imu.git
