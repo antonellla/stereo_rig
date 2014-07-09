@@ -4,3 +4,6 @@
 [submodule "src/dvl_driver"]
 	path = src/dvl_driver
 	url = https://github.com/kunaltyagi/dvl_driver.git
+[submodule "src/see3cam"]
+	path = src/see3cam
+	url = https://github.com/dgossow/see3cam.git
