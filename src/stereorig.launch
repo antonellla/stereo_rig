@@ -1,0 +1,48 @@
+<launch>
+
+<arg name="right_url" value="file:///$(find see3cam)/camera_info/right_camera.yaml" />
+<arg name="left_url" value="file:///$(find see3cam)/camera_info/left_camera.yaml" />
+
+<!-- Launch See3CAM nodes -->
+<node pkg="see3cam" type="uvc_stereo_node" name="see3_stereo">
+  <param name="width" type="int" value="320" />
+  <param name="height" type="int" value="240" />
+  <param name="fps" type="int" value="30" />
+  <param name="frame" type="string" value="wide_stereo" />
+  <param name="left/device" type="string" value="/dev/video0" />
+  <param name="right/device" type="string" value="/dev/video1" />
+  <param name="left/camera_info_url" type="string" value="$(arg left_url)" />
+  <param name="right/camera_info_url" type="string" value="$(arg right_url)" />
+</node>
+
+<!-- Launch DVL driver -->
+<node pkg="dvl_driver" type="dvl_driver" name="dvl_driver"
+	args="serial:///dev/ttyUSB0:9600">
+</node>
+
+<!-- Launch compass -->
+<node pkg="os5000" type="oscompass" name="compass">
+  <param name="baud" value="115200" />
+  <param name="init_time" value="3" />
+  <param name="port" value="/dev/os5000" />
+  <param name="pub_topic_name" value="os5000_data" />
+  <param name="rate" value="50" />
+  <param name="reconnect" value="false" />  
+</node>
+
+<!-- Launch IMU -->
+<node pkg="microstrain_3dmgx2_imu" type="imu_node" name="microstrain_3dmgx2_imu" output="screen">
+  <param name="time_offset" value="-0.040" />
+  <param name="port" type="string" value="/dev/3dm_gx3_25" />
+  <param name="autostart" type="bool" value="true" />
+  <param name="frame_id" type="string" value="base_footprint" />
+  <param name="autocalibrate" type="bool" value="true" />
+  <param name="angular_velocity_stdev" type="double" value="0.00017" />
+  <remap from="/imu/data" to="/mstrain_data" />
+</node>
+
+<!-- Record all data to a bag file -->
+<node pkg="rosbag" type="record" name="rosbag_record"
+	args="-a">
+</node>
+</launch>
