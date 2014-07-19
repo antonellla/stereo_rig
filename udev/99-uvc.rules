@@ -1,0 +1,4 @@
+# UVC cameras
+#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", SYSFS{idVendor}=="2560", SYSFS{idProduct}=="", MODE="0666"
+SUBSYSTEM=="usb", ENV{ID_VENDOR{ID}=="2560", MODE="0666"
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2560", MODE="0666"
