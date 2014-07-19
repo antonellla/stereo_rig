@@ -7,3 +7,6 @@
 [submodule "src/see3cam"]
 	path = src/see3cam
 	url = https://github.com/dgossow/see3cam.git
+[submodule "qx100-interfacing"]
+	path = qx100-interfacing
+	url = https://github.com/UCSD-E4E/qx100-interfacing.git
