@@ -3,7 +3,7 @@ stereo_rig
 
 This repository contains all software that runs on the stereo diving rig.
 
-See the [[wiki]](https://github.com/UCSD-E4E/stereo_rig/wiki) for complete documentation of the rig.
+See the [wiki](https://github.com/UCSD-E4E/stereo_rig/wiki) for complete documentation of the rig.
 
 ### Onboard Sensors
 
