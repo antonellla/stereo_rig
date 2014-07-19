@@ -10,3 +10,6 @@
 [submodule "qx100-interfacing"]
 	path = qx100-interfacing
 	url = https://github.com/UCSD-E4E/qx100-interfacing.git
+[submodule "src/libuvc_ros"]
+	path = src/libuvc_ros
+	url = https://github.com/ktossell/libuvc_ros
