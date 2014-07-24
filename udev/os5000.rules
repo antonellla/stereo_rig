@@ -1,2 +1,2 @@
 # This file sets udev rules for the OS5000 compass
-ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="os5000", ENV{GENERATED}="1"
+ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="os5000", ENV{GENERATED}="1", MODE:="0666"
