@@ -1,2 +1,2 @@
 # This files sets udev rules for the Microstrain 3DM-GX2 IMU
-SUBSYSTEM=="usb", ATTRS{idVendor}=="199b", ATTRS{idProduct}=="3065", SYMLINK+="3dm_gx2_imu", ENV{GENERATED}="1", MODE:="0666"
+ATTRS{idVendor}=="199b", ATTRS{idProduct}=="3065", SYMLINK+="3dm_gx2_imu", ENV{GENERATED}="1", MODE:="0666"
