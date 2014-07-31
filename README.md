@@ -17,9 +17,9 @@ See the [wiki](https://github.com/UCSD-E4E/stereo_rig/wiki) for complete documen
 ### Repository Contents
 
 
-#### qx100_servo_trigger
+#### QX100_Servo_Trigger
 
-Arduino code for triggering the QX100s via servo
+Arduino code for triggering the QX100s (shutter and on/off button) via servo
 
 #### qx100_interfacing
 
