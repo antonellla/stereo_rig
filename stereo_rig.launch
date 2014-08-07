@@ -1,0 +1,39 @@
+<launch>
+	<!-- stereo cameras -->
+	<group ns="mystereo">
+		<node pkg="see3cam" name="uvc_stereo_node" type="uvc_stereo_node">
+			<param name="left/device" value="/dev/video1"/>
+			<param name="right/device" value="/dev/video0"/>
+			<param name="height" value="960"/>
+			<param name="width" value="1280"/>
+		</node>
+		<node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc"/>
+	</group>
+
+	<!-- compass/depth -->
+	<node pkg="os5000" type="oscompass" name="compass">
+		<param name="baud" value="115200"/>
+		<param name="init_time" value="3"/>
+		<param name="port" value="/dev/os5000"/>
+		<param name="pub_topic_name" value="os5000_data"/>
+		<param name="rate" value="50"/>
+		<param name="reconnect" value="false"/>
+	</node>
+
+	<!-- microstrain imu -->
+	<node pkg="microstrain_3dmgx2_imu" type="imu_node" name="microstrain_3dmgx2_imu" output="screen">
+		<param name="time_offset" value="-0.040" />
+		<param name="port" type="string" value="/dev/3dm_gx2_imu" />
+		<param name="autostart" type="bool" value="true" />
+		<param name="frame_id" type="string" value="base_footprint" />
+		<param name="autocalibrate" type="bool" value="true" />
+		<param name="angular_velocity_stdev" type="double" value="0.00017" />
+		<remap from="/imu/data" to="/mstrain_data" />
+	</node>
+
+	<!-- stereo camera viewer -->
+	<!-- <node pkg="image_view" name="stereo_view" type="stereo_view" args="stereo:=mystereo image:=image_rect_color"/> -->
+
+	<!-- record -->
+	<node name="record" pkg="rosbag" type="record" args="-a -o stereo"/>
+</launch>

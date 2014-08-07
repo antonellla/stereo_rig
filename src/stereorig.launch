@@ -16,7 +16,7 @@
 </node>
 
 <!-- Launch DVL driver -->
-<node pkg="dvl_driver" type="dvl_driver" name="dvl_driver"
+<node pkg="dvl_driver" type="teledyne_exp_dvl_node" name="dvl_driver"
 	args="serial:///dev/ttyUSB0:9600">
 </node>
 
