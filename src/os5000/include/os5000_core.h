@@ -168,8 +168,6 @@ public:
     //! to digital through the compass.
     float depth;
 
-    //! Heading in the form of degrees as measured from the magnetometer sensor and converted from analog
-    float heading;
     //! The file descriptor used to communicate with the compass.
     int fd;
 

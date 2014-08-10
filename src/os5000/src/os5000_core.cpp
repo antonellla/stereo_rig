@@ -354,6 +354,7 @@ void Compass::parseMsg()
     memset(tokens, 0, sizeof(tokens));
 
     // Split the incoming buffer up into tokens based on the delimiting characters.
+    // TODO: parse stream interpreting the leading character, not just assuming order
     tokens[0] = strtok_r(Serial::buf_recv, delim, &saveptr);
     for (i = 1; i < Serial::length_recv; i++)
     {
@@ -366,29 +367,35 @@ void Compass::parseMsg()
     }
 
     // Store Euler angles, temperature, depth values.
+    // C (compass heading in degrees)
     if (tokens[0] != NULL)
     {
         yaw = atof(tokens[0]);
     }
+    // P (pitch in degrees)
     if (tokens[1] != NULL)
     {
         pitch = atof(tokens[1]);
     }
+    // R (roll in degrees )
     if (tokens[2] != NULL)
     {
         roll = atof(tokens[2]);
     }
+    // T (temperature in degrees F)
     if (tokens[3] != NULL)
     {
         temperature = atof(tokens[3]);
     }
+    // D (depth in ft)
     if (tokens[4] != NULL)
     {
         depth = atof(tokens[4]);
     }
+    // * (XOR checksum)
     if (tokens[6] != NULL)
     {
-        heading = atof(tokens[6]);
+        // FIXME: implement checksum check
     }
 } // end parseMsg()
 

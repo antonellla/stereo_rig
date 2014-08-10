@@ -66,37 +66,16 @@ OSCompass::~OSCompass()
 void OSCompass::publishImuData(ros::Publisher *pub_imu_data)
 {
     sensor_msgs::Imu imudata;
-    double linear_acceleration_covariance = 10000.;
-    double angular_velocity_covariance = 10000.;
-    double orientation_covariance = 1.;
     uint64_t time = 0;
 
+    // not specifying orientation covariance because we don't know it
     imudata.orientation = tf::createQuaternionMsgFromRollPitchYaw(roll * M_PI / 180., pitch * M_PI / 180., yaw * M_PI / 180.);
-   
-    imudata.orientation_covariance[0] = orientation_covariance;
-    imudata.orientation_covariance[4] = orientation_covariance;
-    imudata.orientation_covariance[8] = orientation_covariance;
 
-    imudata.angular_velocity.x = 0.;
-    imudata.angular_velocity.y = 0.;
-    imudata.angular_velocity.z = 0.;
+    // os5000 does not produce angular velocity measurements 
+    imudata.angular_velocity_covariance[0] = -1;
 
-    imudata.angular_velocity_covariance[0] = angular_velocity_covariance;
-    imudata.angular_velocity_covariance[4] = angular_velocity_covariance;
-    imudata.angular_velocity_covariance[8] = angular_velocity_covariance;
-
-    imudata.linear_acceleration.x = 0.;
-    imudata.linear_acceleration.y = 0.;
-    imudata.linear_acceleration.z = 0.;
-
-    imudata.linear_acceleration_covariance[0] = linear_acceleration_covariance;
-    imudata.linear_acceleration_covariance[4] = linear_acceleration_covariance;
-    imudata.linear_acceleration_covariance[8] = linear_acceleration_covariance;
-
-    //ROS_DEBUG("OS5000 Quaternions = %.1f, %.1f, %.1f, %.1f", imudata.orientation.x, imudata.orientation.y, imudata.orientation.z, imudata.orientation.w);
-    //ROS_DEBUG("OS5000 (RPY) = (%lf, %lf, %lf)", roll, pitch, yaw);
-
-	ROS_DEBUG("DEPTH: %lf", depth);
+    // currently not receiving linear acceleration measurements
+    imudata.linear_acceleration_covariance[0] = -1;
 
     imudata.header.stamp = ros::Time::now().fromNSec(time);
 
@@ -113,19 +92,6 @@ void OSCompass::publishDepth(ros::Publisher *pub_depth)
 	pub_depth->publish(msg);
 
 }
-
-void OSCompass::publishHeading(ros::Publisher *pub_heading)
-{
-    
-    std_msgs::String msg;
-    std::stringstream ss;
-    ss << heading;
-    msg.data=ss.str();
-    pub_heading->publish(msg);
-    
-}
-
-
 
 
 /*------------------------------------------------------------------------------
@@ -179,9 +145,9 @@ int main(int argc, char **argv)
     // Initialize node parameters.
     private_node_handle_.param("baud",           baud,           int(115200));
     private_node_handle_.param("init_time",      init_time,      int(3));
-    private_node_handle_.param("port",           portname,       string("/dev/ttyUSB0"));
+    private_node_handle_.param("port",           portname,       string("/dev/os5000"));
     private_node_handle_.param("pub_topic_name", pub_topic_name, string("os5000_data"));
-    private_node_handle_.param("rate",           rate,           int(40));
+    private_node_handle_.param("rate",           rate,           int(50));
 
     // Create a new OSCompass object.
     OSCompass *oscompass = new OSCompass(portname, baud, rate, init_time);
@@ -193,9 +159,8 @@ int main(int argc, char **argv)
     gain_srv.setCallback(f);
 
     // SePt up publishers.
-    //ros::Publisher pubImuData = n.advertise<sensor_msgs::Imu>(pub_topic_name.c_str(), 1);
-	//ros::Publisher pubDepthData = n.advertise<os5000::DepthMessage>("depthMessage", 1);
-    ros::Publisher pubHeadData = n.advertise<std_msgs::String>("headingMessage",1);
+    ros::Publisher pubImuData = n.advertise<sensor_msgs::Imu>(pub_topic_name.c_str(), 1);
+    ros::Publisher pubDepthData = n.advertise<os5000::DepthMessage>("depthMessage", 1);
     // Tell ROS to run this node at the rate that the compass is sending messages to us.
     ros::Rate r(rate);
 
@@ -212,16 +177,20 @@ int main(int argc, char **argv)
         {
             oscompass->getData();
 
+
             if (oscompass->yaw > 180.)
             {
                 oscompass->yaw -= 360.;
             }
 
             // Publish the message.
-            //oscompass->publishImuData(&pubImuData);
-            //oscompass->publishDepth(&pubDepthData);
-            oscompass->publishHeading(&pubHeadData);
+            oscompass->publishImuData(&pubImuData);
+            oscompass->publishDepth(&pubDepthData);
         }
+	else
+	{
+		ROS_INFO("Error: compass disconnected\n");
+	}
 
         ros::spinOnce();
         r.sleep();
