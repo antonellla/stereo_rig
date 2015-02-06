@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="ueye" name="ueye" type="stereo">
+    <param name="l_pixel_clock" value="80" />
+    <param name="r_pixel_clock" value="80" />
+    <param name="auto_exposure" value="true" />
+  </node> 
+</launch>
