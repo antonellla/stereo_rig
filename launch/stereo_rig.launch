@@ -30,5 +30,5 @@
 	<!-- <node pkg="image_view" name="stereo_view" type="stereo_view" args="stereo:=mystereo image:=image_rect_color"/> -->
 
 	<!-- record -->
-	<node name="record" pkg="rosbag" type="record" args="-a -o stereo"/>
+	<!-- <node name="record" pkg="rosbag" type="record" args="-a -o stereo"/> -->
 </launch>
