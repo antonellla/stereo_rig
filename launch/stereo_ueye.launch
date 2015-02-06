@@ -2,6 +2,8 @@
   <node pkg="ueye" name="ueye" type="stereo">
     <param name="l_pixel_clock" value="80" />
     <param name="r_pixel_clock" value="80" />
+    <param name="frame_rate" value="30" />
+    <param name="zoom" value="2" />
     <param name="auto_exposure" value="true" />
   </node> 
 </launch>

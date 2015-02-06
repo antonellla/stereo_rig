@@ -1,12 +1,7 @@
 <launch>
 	<!-- stereo cameras -->
 	<group ns="mystereo">
-		<node pkg="see3cam" name="uvc_stereo_node" type="uvc_stereo_node">
-			<param name="left/device" value="/dev/video1"/>
-			<param name="right/device" value="/dev/video0"/>
-			<param name="height" value="960"/>
-			<param name="width" value="1280"/>
-		</node>
+		<include file="stereo_ueye.launch" />
 		<node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc"/>
 	</group>
 
