@@ -1,0 +1,28 @@
+<launch>
+
+   <!-- Two monocular image streams published to localhost -->
+   <!-- Need to test with onboard camera setup -->
+
+	<!-- first camera node instance in seperate group namespace -->
+	<group ns="cam1">
+		<node pkg="uvc_camera" type="uvc_camera_node" name="uvc_camera" output="screen">
+			<param name="frame" type="string" value="webcam" />
+			<param name="device" type="string" value="/dev/video0" />
+		</node>
+	</group>
+
+	<!-- second camera node instance in seperate group namespace -->
+	<group ns="cam2">
+		<node pkg="uvc_camera" type="uvc_camera_node" name="uvc_camera" output="screen">
+			<param name="frame" type="string" value="webcam" />
+			<param name="device" type="string" value="/dev/video1" />
+		</node>
+	</group>
+
+	<!-- start web video server node -->
+	<node pkg="web_video_server" type="web_video_server" name="web_video_server">
+	</node>
+
+	<!-- open up html separately -->
+
+</launch>
