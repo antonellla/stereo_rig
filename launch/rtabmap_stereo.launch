@@ -1,0 +1,62 @@
+<launch>
+  <group ns="stereo_camera">
+    <include file="stereo_ueye.launch" />
+    <node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc">
+    </node>
+  </group>
+  <node pkg="rtabmap_ros" type="stereo_odometery" name="stereo_odometry">
+    <remap from="left/image_rect"     to="/stereo_camera/left/image_rect"/>
+    <remap from="right/image_rect"    to="/stereo_camera/right/image_rect"/>
+    <remap from="left/camera_info"    to="/stereo_camera/left/camera_info"/>
+    <remap from="right/camera_info"   to="/stereo_camera/right/camera_info"/>
+    <remap from="odom"                to="/stereo_odometry/odometry"/>
+
+    <param name="frame_id" type="string" value="base_footprint" />
+    <param name="Odom/InlierDistance" type="string" value="0.1"/>
+    <param name="Odom/MinInliers" type="string" value="10"/>
+    <param name="Odom/RoiRatios" type="string" value="0.03 0.03 0.04 0.04"/>
+    <param name="Odom/MaxDepth" type="string" value="10"/>
+    <param name="GFTT/MaxCorners" type="string" value="500"/>
+    <param name="GFTT/MinDistance" type="string" value="5"/>
+  </node>
+  
+  <group ns="rtabmap">
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+      <param name="frame_id" type="string" value="base_footprint"/>
+      <param name="subscribe_stereo" type="bool" value="true"/>
+      <param name="subscribe_depth" type="bool" value="false"/>
+
+      <remap from="left/image_rect"     to="/stereo_camera/left/image_rect"/>
+      <remap from="right/image_rect"    to="/stereo_camera/right/image_rect"/>
+      <remap from="left/camera_info"    to="/stereo_camera/left/camera_info"/>
+      <remap from="right/camera_info"   to="/stereo_camera/right/camera_info"/>
+      <remap from="odom"                to="/stereo_odometry/odometry"/>
+
+      <param name="queue_size" type="int" value="30"/>
+
+
+      <!-- RTAB-Map's parameters -->
+      <param name="Rtabmap/TimeThr" type="string" value="700"/>
+      <param name="Rtabmap/DetectionRate" type="string" value="1"/>
+      
+      <param name="Kp/WordsPerImage" type="string" value="200"/>
+      <param name="Kp/RoiRatios" type="string" value="0.03 0.03 0.04 0.04"/>
+
+      <param name="SURF/HessianThreshold" type="string" value="1000"/>
+
+      <param name="LccBow/MaxDepth" type="string" value="10"/>
+      <param name="LccBow/MinInliers" type="string" value="10"/>
+      <param name="LccBow/InlierDistance" type="string" value="0.02"/>
+
+      <param name="LccReextract/Activated" type="string" value="true"/>
+      <param name="LccReextract/MaxWords" type="string" value="400"/>
+         
+      <!-- Disable graph optimization because we use map_optimizer node below -->
+      <param name="RGBD/ToroIterations" type="string" value="0"/> 
+    </node>
+
+    <!-- Optimizing outside rtabmap node makes it able to optimize always the global map -->
+    <node pkg="rtabmap_ros" type="map_optimizer" name="map_optimizer"/>
+  </group> 
+
+</launch>
