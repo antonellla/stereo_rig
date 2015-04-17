@@ -2,7 +2,7 @@
 import rospy
 from std_msgs.msg import Float64
 
-def callback(data)
+def callback(data):
     rospy.loginfo(rospy.get_caller_id()+ "I got %d", data.data);
 
 def listener():
