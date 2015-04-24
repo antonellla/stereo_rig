@@ -14,5 +14,5 @@
 	path = src/libuvc_ros
 	url = https://github.com/ktossell/libuvc_ros
 [submodule "src/image_pipeline"]
-	path = src/image_pipline
-	url = https://github.com/UCSD-E4E/image_pipeline
+	path = src/image_pipeline
+	url = https://github.com/ros-perception/image_pipeline
