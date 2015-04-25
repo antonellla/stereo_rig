@@ -16,4 +16,4 @@
 [submodule "src/image_pipeline"]
 	path = src/image_pipeline
 	url = https://github.com/njzhangyifei/image_pipeline.git
-	branch = hydro-devel
+    branch = hydro-devel
