@@ -13,3 +13,6 @@
 [submodule "src/image_pipeline"]
 	path = src/image_pipeline
 	url = https://github.com/ros-perception/image_pipeline
+[submodule "src/see3cam"]
+	path = src/see3cam
+	url = https://github.com/UCSD-E4E/see3cam.git
