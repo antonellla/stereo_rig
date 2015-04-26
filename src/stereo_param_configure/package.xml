@@ -2,7 +2,10 @@
 <package>
   <name>stereo_param_configure</name>
   <version>0.0.0</version>
-  <description>The stereo_param_configure package</description>
+  <description>
+      The stereo_param_configure package. This is a simple ROS node that
+      accepts std_msgs and set the IDS cameras on board using parameter server.
+  </description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <maintainer email="njzhangyifei@gmail.com">Yifei Zhang</maintainer>
@@ -10,7 +13,7 @@
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>TODO</license>
+  <license>MIT</license>
 
 
   <!-- Url tags are optional, but mutiple are allowed, one per tag -->
