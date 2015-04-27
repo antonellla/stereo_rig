@@ -1,5 +1,5 @@
 """
-File: stereo_param_configure.py
+File: stereoparam.py
 Author: Yifei Zhang
 Email: njzhangyifei@gmail.com
 Github: https://github.com/njzhangyifei
@@ -7,9 +7,9 @@ Description:
     Function for ROS node stereo_param_configure
 """
 
-class StereoParamReconfigure(object):
+class StereoParam(object):
     """StereoParamConfigure
-    self._client: dynamic_reconfigure.client.Client
+    @type  self._client: dynamic_reconfigure.client.Client
     """
 
     def __init__(self, client):
@@ -38,6 +38,15 @@ class StereoParamReconfigure(object):
         if not isinstance(auto_exposure, bool):
             return
         param_dict = {"auto_exposure" : auto_exposure}
+        self._client.update_configuration(param_dict)
+
+    def set_gain(self, gain):
+        """set gain
+        :gain : the gain value
+        """
+        if not isinstance(gain, int):
+            return
+        param_dict = {"gain" : gain}
         self._client.update_configuration(param_dict)
 
     def set_auto_gain(self, auto_gain):
