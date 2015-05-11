@@ -1,3 +1,4 @@
 build/*
 install/*
 devel/*
+src/ueye_external_trigger
