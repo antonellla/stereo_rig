@@ -13,10 +13,6 @@
 [submodule "src/see3cam"]
 	path = src/see3cam
 	url = https://github.com/UCSD-E4E/see3cam.git
-[submodule "src/image_pipeline"]
-	path = src/image_pipeline
-	url = https://github.com/njzhangyifei/image_pipeline.git
-    branch = hydro-devel
 [submodule "uEye-External-Trigger"]
 	path = uEye-External-Trigger
 	url = https://github.com/njzhangyifei/uEye-External-Trigger.git
