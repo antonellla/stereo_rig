@@ -4,9 +4,12 @@
 	<node pkg="tf" type="static_transform_publisher" name="base_link_right_broadcaster" args="0 0 0 0 0 0 base_link right 100" />
 	<!-- stereo cameras -->
 	<group ns="mystereo">
-		<include file="stereo_ueye.launch" />
+		<include file="stereo_ueye_sync.launch" />
 		<node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc"/>
-			<param name="approximate_sync" value="true" />
+		<node pkg="ueye_external_trigger" name="ueye_external_trigger" type="ueye_external_trigger">
+			<param name="port_name" value="/dev/ttyACM0" />
+			<param name="frame_rate" value="20" />
+		</node>
 	</group>
 
 	<!-- compass/depth -->
