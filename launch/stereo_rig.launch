@@ -1,53 +1,69 @@
 <launch>
-	<node pkg="tf" type="static_transform_publisher" name="base_footprint_base_link_broadcaster" args="0 0 0 0 0 0 base_footprint base_link 100" />
-	<node pkg="tf" type="static_transform_publisher" name="base_link_left_broadcaster" args="0 0 0 0 0 0 base_link left 100" />
-	<node pkg="tf" type="static_transform_publisher" name="base_link_right_broadcaster" args="0 0 0 0 0 0 base_link right 100" />
-	<!-- stereo cameras -->
-	<group ns="mystereo">
-		<include file="stereo_ueye_sync.launch" />
-		<node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc"/>
-		<node pkg="ueye_external_trigger" name="ueye_external_trigger" type="ueye_external_trigger">
-			<param name="port_name" value="/dev/ttyACM0" />
-			<param name="frame_rate" value="20" />
-		</node>
-	</group>
+    <!-- TODO::Fix tf for baseline -->
+    <node pkg="tf" type="static_transform_publisher"
+        name="stereo_link_left_broadcaster"
+        args="0 0 0 0 0 0 stereo_link left 100" />
+    <node pkg="tf" type="static_transform_publisher"
+        name="stereo_link_right_broadcaster"
+        args="0 0 0 0 0 0 stereo_link right 100" />
 
-	<!-- compass/depth -->
-	<node pkg="os5000" type="oscompass" name="compass">
-		<param name="baud" value="115200"/>
-		<param name="init_time" value="3"/>
-		<param name="port" value="/dev/os5000"/>
-		<param name="pub_topic_name" value="os5000_data"/>
-		<param name="rate" value="50"/>
-		<param name="reconnect" value="false"/>
-	</node>
+    <!-- stereo cameras -->
+    <group ns="mystereo">
+        <include file="stereo_ueye_sync.launch" />
+        <node pkg="stereo_image_proc" name="stereo_image_proc"
+            type="stereo_image_proc"/>
+        <node pkg="ueye_external_trigger" name="ueye_external_trigger"
+            type="ueye_external_trigger">
+            <param name="port_name" value="/dev/ttyACM0" />
+            <param name="frame_rate" value="20" />
+        </node>
+        <node pkg="stereo_param_configure" name="stereo_param_configure"
+            type="stereo_param_configure"/>
+    </group>
 
-	<!-- microstrain imu -->
-	<node pkg="microstrain_3dmgx2_imu" type="imu_node" name="microstrain_3dmgx2_imu" output="screen">
-		<param name="time_offset" value="-0.040" />
-		<param name="port" type="string" value="/dev/3dm_gx2_imu" />
-		<param name="autostart" type="bool" value="true" />
-		<param name="frame_id" type="string" value="base_footprint" />
-		<param name="autocalibrate" type="bool" value="true" />
-		<param name="angular_velocity_stdev" type="double" value="0.00017" />
-		<remap from="/imu/data" to="/imu_data" />
-	</node>
+    <!-- rosbridge websocket @ 127.0.0.1:8090 -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+        <arg name="port" value="8090" />
+    </include>
+    <!-- web_video_server -->
+    <node pkg="web_video_server" type="web_video_server"
+        name="web_video_server" />
 
-	<!-- hydrophone audio capture -->
-	<node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
-		<param name="bitrate" value="128"/>
-	</node>	
+    <!-- compass/depth -->
+    <node pkg="os5000" type="oscompass" name="compass">
+        <param name="baud" value="115200"/>
+        <param name="init_time" value="3"/>
+        <param name="port" value="/dev/os5000"/>
+        <param name="pub_topic_name" value="os5000_data"/>
+        <param name="rate" value="50"/>
+        <param name="reconnect" value="false"/>
+    </node>
+
+    <!-- microstrain imu -->
+    <node pkg="microstrain_3dmgx2_imu" type="imu_node" name="microstrain_3dmgx2_imu" output="screen">
+        <param name="time_offset" value="-0.040" />
+        <param name="port" type="string" value="/dev/3dm_gx2_imu" />
+        <param name="autostart" type="bool" value="true" />
+        <param name="frame_id" type="string" value="base_footprint" />
+        <param name="autocalibrate" type="bool" value="true" />
+        <param name="angular_velocity_stdev" type="double" value="0.00017" />
+        <remap from="/imu/data" to="/imu_data" />
+    </node>
+
+    <!-- hydrophone audio capture -->
+    <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
+        <param name="bitrate" value="128"/>
+    </node> 
 
 
-	<!-- stereo camera viewer -->
-	<!-- <node pkg="image_view" name="stereo_view" type="stereo_view" args="stereo:=mystereo image:=image_rect_color"/> -->
+    <!-- stereo camera viewer -->
+    <!-- <node pkg="image_view" name="stereo_view" type="stereo_view" args="stereo:=mystereo image:=image_rect_color"/> -->
 
-	<!-- record -->
-	<!-- <node name="record" pkg="rosbag" type="record" args="-a -o stereo"/> -->
-	<!-- <node pkg="viso2_ros" name="stereo_odometer" type="stereo_odometer" output="screen" args="stereo:=mystereo image:=image_rect"> -->
-	<!--	<param name="base_link_frame_id" value="base_footprint" /> -->
-	<!--	<param name="publish_tf" value="false" /> -->
-	<!--	<remap from="/stereo_odometer/odometry" to="/vo" /> -->
-	<!-- </node> -->
-	<!-- <include file="robot_pose_ekf.launch" /> -->
+    <!-- record -->
+    <!-- <node name="record" pkg="rosbag" type="record" args="-a -o stereo"/> -->
+    <!-- <node pkg="viso2_ros" name="stereo_odometer" type="stereo_odometer" output="screen" args="stereo:=mystereo image:=image_rect"> -->
+    <!--    <param name="base_link_frame_id" value="base_footprint" /> -->
+    <!--    <param name="publish_tf" value="false" /> -->
+    <!--    <remap from="/stereo_odometer/odometry" to="/vo" /> -->
+    <!-- </node> -->
 </launch>
