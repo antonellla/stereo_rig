@@ -24,31 +24,28 @@ def callback_auto_exposure(data):
     :data : data field in standard message
     """
     STEREO_PARAM.set_auto_exposure(data.data)
+    rospy.loginfo("Auto Exposure changed to %s", "TRUE" if data.data else "FALSE")
 
 def callback_exposure(data):
     """callback for exposure
     :data : data field in standard message
     """
     STEREO_PARAM.set_exposure_time(data.data)
-    rospy.loginfo(rospy.get_caller_id()+ "I got %f", data.data)
+    rospy.loginfo("Exposure changed to %d", data.data)
 
 def callback_auto_gain(data):
     """callback for auto gain
     :data : data field in standard message
     """
     STEREO_PARAM.set_auto_gain(data.data)
+    rospy.loginfo("Auto Gain changed to %s", "TRUE" if data.data else "FALSE")
 
 def callback_gain(data):
     """callback for gain
     :data : data field in standard message
     """
     STEREO_PARAM.set_gain(data.data)
-
-def callback_frame_rate(data):
-    """callback for frame rate
-    :data : data field in standard message
-    """
-    STEREO_PARAM.set_frame_rate(data.data)
+    rospy.loginfo("Gain changed to %d", data.data)
 
 def callback_config(config):
     """callback for dynamic reconfigure client
@@ -56,13 +53,13 @@ def callback_config(config):
     """
     callback_string = ', '.join("[{!s} : {!r}]".format(key, val) \
             for (key, val) in config.items())
-    rospy.loginfo("Configuration changed to %s", callback_string)
+    rospy.logdebug("Configuration changed to %s", callback_string)
 
 def listener():
     """register the node as subscriber to topics
     """
     global STEREO_PARAM
-    rospy.init_node('stereorig_web_reconfigure')
+    rospy.init_node('stereo_param_reconfigure')
     rospy.loginfo('Trying to connect to ueye node')
     try:
         client = dynamic_reconfigure.client.Client('ueye'\
@@ -71,12 +68,11 @@ def listener():
         rospy.logfatal('Failed to register as a client, Exiting')
         return
     STEREO_PARAM = stereo_param_configure.stereoparam.StereoParam(client)
-    rospy.loginfo('Stereo Rig Reconfigure node up and running')
+    rospy.loginfo('Stereo Rig uEye Reconfigure node up and running')
     rospy.Subscriber("exposure", Float64, callback_exposure)
     rospy.Subscriber("auto_exposure", Bool, callback_auto_exposure)
     rospy.Subscriber("gain", Int32, callback_gain)
     rospy.Subscriber("auto_gain", Bool, callback_auto_gain)
-    rospy.Subscriber("frame_rate", Float64, callback_frame_rate)
     rospy.spin()
 
 if __name__ == '__main__':
