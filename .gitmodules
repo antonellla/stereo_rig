@@ -16,3 +16,6 @@
 [submodule "uEye-External-Trigger"]
 	path = uEye-External-Trigger
 	url = https://github.com/njzhangyifei/uEye-External-Trigger.git
+[submodule "image_pipeline"]
+	path = image_pipeline
+	url = https://github.com/ros-perception/image_pipeline.git
